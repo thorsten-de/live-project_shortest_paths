@@ -1,5 +1,8 @@
-﻿using System.Text;
+﻿using Microsoft.Win32;
+using System;
+using System.Text;
 using System.Windows;
+using System.Windows.Input;
 
 namespace ShortestPaths
 {
@@ -11,84 +14,47 @@ namespace ShortestPaths
     public MainWindow()
     {
       InitializeComponent();
-
-
     }
 
+    private Network Network = new Network();
 
-
-    void ValidateNetwork(Network network, string filename)
+    private void OpenCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
     {
-      string serializedOriginal = network.Serialize();
-      network.SaveToFile(filename);
-
-      network.ReadFromFile(filename);
-      string serializedReloaded = network.Serialize();
-
-      bool isMatch = serializedOriginal == serializedReloaded;
-
-      statusLabel.Content = isMatch ? "OK" : "Serializations do not match";
-      netTextBox.Text = new StringBuilder(serializedOriginal).Append("\n\n").Append(serializedReloaded).ToString();
-
-
+      e.CanExecute = true;
     }
 
-
-    private void validateNetwork1_Click(object sender, RoutedEventArgs e)
+    private void OpenCommand_Executed(object sender, ExecutedRoutedEventArgs e)
     {
+      try
+      {
+        var dialog =
+          new OpenFileDialog()
+          {
+            DefaultExt = ".net",
+            Filter = "Network Files|*.net|All Files|*.*"
+          };
+        if (dialog.ShowDialog() == true)
+        {
+          Network.ReadFromFile(dialog.FileName);
+        }
 
-      var network = new Network();
-      var n = new[] {
-      new Node(network, new Point(20, 20), "A"),
-      new Node(network, new Point(120, 20), "B"),
-      };
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show(ex.Message);
+        Network = new Network();
+      }
 
-      new Link(network, n[0], n[1], 10);
-
-      ValidateNetwork(network, "network_1.net");
-
-
+      DrawNetwork();
     }
 
-    private void validateNetwork2_Click(object sender, RoutedEventArgs e)
+    private void MenuItemExit_Click(object sender, RoutedEventArgs e)
     {
-      var network = new Network();
-      var n = new[] {
-      new Node(network, new Point(20, 20), "A"),
-      new Node(network, new Point(120, 20), "B"),
-      new Node(network, new Point(20, 120), "C"),
-      new Node(network, new Point(120, 120), "D")
-      };
-
-      new Link(network, n[0], n[1], 10);
-      new Link(network, n[1], n[3], 15);
-      new Link(network, n[0], n[2], 20);
-      new Link(network, n[2], n[3], 25);
-
-      ValidateNetwork(network, "network_2.net");
-
+      Close();
     }
 
-    private void validateNetwork3_Click(object sender, RoutedEventArgs e)
+    private void DrawNetwork()
     {
-      var network = new Network();
-      var n = new[] {
-      new Node(network, new Point(20, 20), "A"),
-      new Node(network, new Point(120, 20), "B"),
-      new Node(network, new Point(20, 120), "C"),
-      new Node(network, new Point(120, 120), "D") 
-      };
-
-      new Link(network, n[0], n[1], 10);
-      new Link(network, n[1], n[3], 15);
-      new Link(network, n[0], n[2], 20);
-      new Link(network, n[2], n[3], 25);
-      new Link(network, n[1], n[0], 11);
-      new Link(network, n[3], n[1], 16);
-      new Link(network, n[2], n[0], 21);
-      new Link(network, n[3], n[2], 26);
-
-      ValidateNetwork(network, "network_3.net");
 
     }
   }
