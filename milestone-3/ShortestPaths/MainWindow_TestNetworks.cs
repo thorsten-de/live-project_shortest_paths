@@ -31,7 +31,7 @@ namespace ShortestPaths
 
       for (int y = 0; y < numRows; y++) {
         for (int  x = 0; x < numCols; x++) {
-          new Node(network, new Point(x * stepX, y * stepY), (network.Nodes.Count + 1).ToString());
+          new Node(network, bounds.TopLeft + new Vector(x * stepX, y * stepY), (network.Nodes.Count + 1).ToString());
         }
       }
 

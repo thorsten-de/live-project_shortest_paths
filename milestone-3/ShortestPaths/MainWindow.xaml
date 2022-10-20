@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShortestPaths"
         mc:Ignorable="d"
-        Title="MainWindow" Height="400" Width="400">
+        Title="MainWindow" Height="500" Width="640">
     <Window.CommandBindings>
         <CommandBinding Command="Open" CanExecute="OpenCommand_CanExecute" Executed="OpenCommand_Executed" />
     </Window.CommandBindings>
