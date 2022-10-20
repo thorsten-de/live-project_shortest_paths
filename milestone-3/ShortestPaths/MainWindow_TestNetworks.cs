@@ -16,7 +16,7 @@ namespace ShortestPaths
     private void MakeRandomizedLink(Random rand, Network network, Node from, Node to)
     {
       var distance = to.Center - from.Center;
-      new Link(network, from, to, Convert.ToInt32((1.0 + 0.2 * rand.NextDouble()) * distance.Length));
+      new Link(network, from, to, Convert.ToInt32(distance.Length));
     }
 
     private Network BuildGridNetwork(string filename, double width, double height, int numRows, int numCols)
@@ -31,7 +31,7 @@ namespace ShortestPaths
 
       for (int y = 0; y < numRows; y++) {
         for (int  x = 0; x < numCols; x++) {
-          new Node(network, new Point(x * stepX, y * stepY), (network.Nodes.Count + 1).ToString());
+          new Node(network, new Point(x * stepX + rand.NextDouble() * stepX / 2 , y * stepY + rand.NextDouble() * stepY/2), (network.Nodes.Count + 1).ToString());
         }
       }
 
