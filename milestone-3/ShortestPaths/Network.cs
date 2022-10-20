@@ -97,15 +97,20 @@ namespace ShortestPaths
     const double MARGIN = 20;
     public void Draw(Canvas canvas)
     {
+      bool drawLabels = Nodes.Count < 100;
+      
       Rect bounds = GetBounds();
       canvas.Width = bounds.Width + MARGIN;
       canvas.Height = bounds.Height + MARGIN;
 
       foreach (var link in Links) link.Draw(canvas);
 
-      foreach (var link in Links) link.DrawLabel(canvas);
+      if (drawLabels)
+      {
+        foreach (var link in Links) link.DrawLabel(canvas);
+      }
 
-      foreach (var node in Nodes) node.Draw(canvas);
+      foreach (var node in Nodes) node.Draw(canvas, drawLabels);
     }
 
     public Rect GetBounds() =>

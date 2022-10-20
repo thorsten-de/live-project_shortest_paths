@@ -38,12 +38,15 @@ namespace ShortestPaths
     public Brush Background { get; set; } = Brushes.White;
     public Brush Foregrond { get; set; } = Brushes.SteelBlue;
 
-    public const double RADIUS = 10;
+    public const double LARGE_RADIUS = 10;
+    public const double SMALL_RADIUS = 3;
 
-    public void Draw(Canvas canvas)
+    public void Draw(Canvas canvas, bool drawLabels)
     {
-      canvas.DrawEllipse(Center.CenteredBounds(RADIUS), Background, Stroke, StrokeThickness);
-      canvas.DrawString(Text, 2 * RADIUS, 2 * RADIUS, Center, 0, 12, Foregrond);
+      double radius = drawLabels ? LARGE_RADIUS : SMALL_RADIUS; 
+      canvas.DrawEllipse(Center.CenteredBounds(radius), Background, Stroke, StrokeThickness);
+      if (drawLabels)
+        canvas.DrawString(Text, 2 * radius, 2 * radius, Center, 0, 12, Foregrond);
     }
 
   }
