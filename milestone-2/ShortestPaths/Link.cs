@@ -44,16 +44,12 @@ namespace ShortestPaths
     public void DrawLabel(Canvas canvas)
     {
       Vector d = ToNode.Center - FromNode.Center;
-      double angle = Math.Atan2(d.X, d.Y) * 180 / Math.PI - 90;
+      double angle = Math.Atan2(d.Y, d.X) * 180 / Math.PI;
 
       Point c = FromNode.Center + d / 3;
 
       canvas.DrawEllipse(c.CenteredBounds(10), Brushes.White, Brushes.White, 0);
-      canvas.DrawString(Cost.ToString(), 20, 20, c, -angle, 11, TextBrush);
-
-
-
+      canvas.DrawString(Cost.ToString(), 20, 20, c, angle, 11, TextBrush);
     }
-
   }
 }
