@@ -41,6 +41,8 @@ namespace ShortestPaths
       canvas.DrawLine(FromNode.Center, ToNode.Center, Stroke, StrokeThickness);
     }
 
+    public const double RADIUS = 10;
+
     public void DrawLabel(Canvas canvas)
     {
       Vector d = ToNode.Center - FromNode.Center;
@@ -48,8 +50,8 @@ namespace ShortestPaths
 
       Point c = FromNode.Center + d / 3;
 
-      canvas.DrawEllipse(c.CenteredBounds(10), Brushes.White, Brushes.White, 0);
-      canvas.DrawString(Cost.ToString(), 20, 20, c, angle, 11, TextBrush);
+      canvas.DrawEllipse(c.CenteredBounds(RADIUS), Brushes.White, Brushes.White, 0);
+      canvas.DrawString(Cost.ToString(), 2 * RADIUS, 2 * RADIUS, c, angle, 12, TextBrush);
     }
   }
 }

@@ -38,10 +38,12 @@ namespace ShortestPaths
     public Brush Background { get; set; } = Brushes.White;
     public Brush Foregrond { get; set; } = Brushes.SteelBlue;
 
+    public const double RADIUS = 10;
+
     public void Draw(Canvas canvas)
     {
-      canvas.DrawEllipse(Center.CenteredBounds(10), Background, Stroke, StrokeThickness);
-      canvas.DrawString(Text, 20, 20, Center, 0, 11, Foregrond);
+      canvas.DrawEllipse(Center.CenteredBounds(RADIUS), Background, Stroke, StrokeThickness);
+      canvas.DrawString(Text, 2 * RADIUS, 2 * RADIUS, Center, 0, 12, Foregrond);
     }
 
   }
