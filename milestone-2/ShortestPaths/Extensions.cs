@@ -7,11 +7,15 @@ using System.Windows;
 using System.Windows.Shapes;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Security.RightsManagement;
 
 namespace ShortestPaths
 {
     public static class Extensions
     {
+
+        public static Rect CenteredBounds(this Point p, double radius) =>
+            new Rect(p.X - radius, p.Y - radius, 2 * radius, 2 * radius);
 
         #region Add Shapes to a Canvas
 

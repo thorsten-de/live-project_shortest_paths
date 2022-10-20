@@ -1,4 +1,12 @@
-﻿namespace ShortestPaths
+﻿using System;
+using System.ComponentModel;
+using System.Security.Cryptography.Xml;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Ink;
+using System.Windows.Media;
+
+namespace ShortestPaths
 {
   internal class Link
   {
@@ -21,5 +29,31 @@
     {
       return $"{FromNode} --> {ToNode} ({Cost})";
     }
+
+    public Brush TextBrush { get; set; } = Brushes.Black;
+
+    public Brush Stroke { get; set; } = Brushes.Green;
+
+    public double StrokeThickness { get; set; } = 2.0;
+
+    public void Draw(Canvas canvas)
+    {
+      canvas.DrawLine(FromNode.Center, ToNode.Center, Stroke, StrokeThickness);
+    }
+
+    public void DrawLabel(Canvas canvas)
+    {
+      Vector d = ToNode.Center - FromNode.Center;
+      double angle = Math.Atan2(d.X, d.Y) * 180 / Math.PI - 90;
+
+      Point c = FromNode.Center + d / 3;
+
+      canvas.DrawEllipse(c.CenteredBounds(10), Brushes.White, Brushes.White, 0);
+      canvas.DrawString(Cost.ToString(), 20, 20, c, -angle, 11, TextBrush);
+
+
+
+    }
+
   }
 }

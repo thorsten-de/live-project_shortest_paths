@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Ink;
+using System.Windows.Media;
 
 namespace ShortestPaths
 {
@@ -27,6 +30,19 @@ namespace ShortestPaths
     }
 
     public void AddLink(Link link) => Links.Add(link);
+
+
+    public Brush Stroke { get; set; } = Brushes.Black;
+    public double StrokeThickness { get; set; } = 2.0;
+
+    public Brush Background { get; set; } = Brushes.White;
+    public Brush Foregrond { get; set; } = Brushes.SteelBlue;
+
+    public void Draw(Canvas canvas)
+    {
+      canvas.DrawEllipse(Center.CenteredBounds(10), Background, Stroke, StrokeThickness);
+      canvas.DrawString(Text, 20, 20, Center, 0, 11, Foregrond);
+    }
 
   }
 }

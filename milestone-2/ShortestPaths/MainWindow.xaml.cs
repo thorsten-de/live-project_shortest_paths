@@ -16,7 +16,7 @@ namespace ShortestPaths
       InitializeComponent();
     }
 
-    private Network Network = new Network();
+    private Network MyNetwork = new Network();
 
     private void OpenCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
     {
@@ -35,14 +35,14 @@ namespace ShortestPaths
           };
         if (dialog.ShowDialog() == true)
         {
-          Network.ReadFromFile(dialog.FileName);
+          MyNetwork = Network.FromFile(dialog.FileName);
         }
 
       }
       catch (Exception ex)
       {
         MessageBox.Show(ex.Message);
-        Network = new Network();
+        MyNetwork = new Network();
       }
 
       DrawNetwork();
@@ -55,7 +55,8 @@ namespace ShortestPaths
 
     private void DrawNetwork()
     {
-
+      mainCanvas.Children.Clear();
+      MyNetwork.Draw(mainCanvas);
     }
   }
 }

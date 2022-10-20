@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Permissions;
 using System.Text;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace ShortestPaths
 {
@@ -13,6 +17,14 @@ namespace ShortestPaths
     public Network()
     {
       Clear();
+    }
+
+    // I prefer aptly named static methods over constructor overloads
+    public static Network FromFile(string filename)
+    {
+      var network = new Network();
+      network.ReadFromFile(filename);
+      return network;
     }
 
     public void Clear()
@@ -80,6 +92,28 @@ namespace ShortestPaths
 
     public void ReadFromFile(string filename) =>
       Deserialize(File.ReadAllText(filename));
+
+
+    const double MARGIN = 20;
+    public void Draw(Canvas canvas)
+    {
+      Rect bounds = GetBounds();
+      canvas.Width = bounds.Width + MARGIN;
+      canvas.Height = bounds.Height + MARGIN;
+
+      foreach (var link in Links) link.Draw(canvas);
+
+      foreach (var link in Links) link.DrawLabel(canvas);
+
+      foreach (var node in Nodes) node.Draw(canvas);
+    }
+
+    public Rect GetBounds() =>
+      Nodes.Aggregate(
+        new Rect(0, 0, 0, 0),
+        (bounds, node) =>
+        Rect.Union(bounds, new Rect(node.Center, new Point(0, 0)))
+      );
 
   }
 }
