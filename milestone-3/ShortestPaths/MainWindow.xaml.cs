@@ -58,5 +58,6 @@ namespace ShortestPaths
       mainCanvas.Children.Clear();
       MyNetwork.Draw(mainCanvas);
     }
+
   }
 }

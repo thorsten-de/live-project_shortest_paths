@@ -13,6 +13,10 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Command="Open" />
+                <MenuItem Header="Make _Tests">
+                    <MenuItem Header="6x10"  Click="Generate_6x10_Click" />
+                    <MenuItem Header="10x15"  Click="Generate_10x15_Click" />
+                </MenuItem>
                 <Separator />
                 <MenuItem Header="_Exit" Click="MenuItemExit_Click" />
             </MenuItem>
