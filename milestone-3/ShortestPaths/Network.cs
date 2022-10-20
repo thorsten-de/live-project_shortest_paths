@@ -46,7 +46,7 @@ namespace ShortestPaths
         .AppendFormat("{0} # Num nodes.\n", Nodes.Count)
         .AppendFormat("{0} # Num links.\n", Links.Count)
         .AppendLine("# Nodes.")
-        .AppendJoin("\n", Nodes.Select(n => string.Format("{0},{1},{2}", n.Center.X, n.Center.Y, n.Text)))
+        .AppendJoin("\n", Nodes.Select(n => string.Format("{0:F0},{1:F0},{2}", n.Center.X, n.Center.Y, n.Text)))
         .AppendLine("\n# Links.")
         .AppendJoin("\n", Links.Select(l => string.Format("{0},{1},{2}", l.FromNode.Index, l.ToNode.Index, l.Cost)))
       .ToString();
