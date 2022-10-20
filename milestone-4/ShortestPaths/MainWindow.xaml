@@ -14,6 +14,7 @@
             <MenuItem Header="_File">
                 <MenuItem Command="Open" />
                 <MenuItem Header="Make _Tests">
+                    <MenuItem Header="4x4"  Click="Generate_4x4_Click" />
                     <MenuItem Header="6x10"  Click="Generate_6x10_Click" />
                     <MenuItem Header="10x15"  Click="Generate_10x15_Click" />
                 </MenuItem>

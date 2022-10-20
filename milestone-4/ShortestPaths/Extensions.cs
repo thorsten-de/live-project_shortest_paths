@@ -13,6 +13,10 @@ namespace ShortestPaths
 {
     public static class Extensions
     {
+        public static void ForEach<T>(this IEnumerable<T> enumeration, Action<T> action)
+        {
+            foreach (var item in enumeration) action(item);
+        }
 
         public static Rect CenteredBounds(this Point p, double radius) =>
             new Rect(p.X - radius, p.Y - radius, 2 * radius, 2 * radius);

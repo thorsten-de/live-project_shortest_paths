@@ -6,6 +6,8 @@ using System.Security.Permissions;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Shapes;
 
 namespace ShortestPaths
 {
@@ -64,7 +66,7 @@ namespace ShortestPaths
         for (int i = 0; i < nodeCount; i++)
         {
           var nodeData = ReadNextLine(reader).Split(','); 
-          new Node(this, new System.Windows.Point(double.Parse(nodeData[0]), double.Parse(nodeData[1])), nodeData[2]);
+          new Node(this, new Point(double.Parse(nodeData[0]), double.Parse(nodeData[1])), nodeData[2]);
         }
         for (int i = 0; i < linkCount; i++)
         {
@@ -120,5 +122,42 @@ namespace ShortestPaths
         Rect.Union(bounds, new Rect(node.Center, new Point(0, 0)))
       );
 
+    private Node StartNode { get; set; }
+    
+    private Node EndNode { get; set; }
+
+    internal void node_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+      if (((FrameworkElement)sender).Tag is Node node)
+      {
+        OnNodeClicked(node, e);
+      }
+    }
+
+    protected void OnNodeClicked(Node node, MouseButtonEventArgs e)
+    {
+      if (e.LeftButton == MouseButtonState.Pressed)
+      {
+        if (StartNode != null)
+        {
+          StartNode.Links.ForEach(l => l.IsInTree = false);
+          StartNode.IsStartNode = false;
+        }
+        node.Links.ForEach(l => l.IsInTree = true);
+        node.IsStartNode = true;
+        StartNode = node;
+      }
+      if (e.RightButton == MouseButtonState.Pressed)
+      {
+        if (EndNode != null)
+        {
+          EndNode.Links.ForEach(l => l.IsInPath = false);
+          EndNode.IsEndNode = false;
+        }
+        node.Links.ForEach(l => l.IsInPath = true);
+        node.IsEndNode = true;
+        EndNode = node;
+      }
+    }
   }
 }

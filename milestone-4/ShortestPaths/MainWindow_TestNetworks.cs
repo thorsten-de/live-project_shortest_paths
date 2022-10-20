@@ -52,6 +52,12 @@ namespace ShortestPaths
       return network;
     }
 
+    private void Generate_4x4_Click(object sender, RoutedEventArgs e)
+    {
+      MyNetwork = BuildGridNetwork("4x4_test.net", 400, 400, 4, 4);
+      DrawNetwork();
+    }
+
     private void Generate_6x10_Click(object sender, RoutedEventArgs e)
     {
       MyNetwork = BuildGridNetwork("6x10_test.net", 600, 400, 6, 10);
