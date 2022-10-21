@@ -22,6 +22,10 @@
                 <MenuItem Header="_Exit" Click="MenuItemExit_Click" />
             </MenuItem>
         </Menu>
+        <ToolBar DockPanel.Dock="Top">
+            <ComboBox x:Name="algorithmComboBox" SelectionChanged="algorithmComboBox_SelectionChanged" >
+            </ComboBox>
+        </ToolBar>
         <Border BorderBrush="Gray" BorderThickness="2" Margin="3">
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <Canvas x:Name="mainCanvas" />

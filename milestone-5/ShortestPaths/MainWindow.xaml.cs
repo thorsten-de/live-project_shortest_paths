@@ -2,6 +2,7 @@
 using System;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace ShortestPaths
@@ -14,6 +15,10 @@ namespace ShortestPaths
     public MainWindow()
     {
       InitializeComponent();
+
+      var algorithms = new PathAlgorithm[] { new LabelSetting(), new LabelCorrecting() };
+      algorithmComboBox.ItemsSource = algorithms;
+      algorithmComboBox.SelectedItem = algorithms[0];
     }
 
     private Network MyNetwork = new Network();
@@ -59,5 +64,8 @@ namespace ShortestPaths
       MyNetwork.Draw(mainCanvas);
     }
 
+    private void algorithmComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e){
+      MyNetwork.AlgorithmType = (PathAlgorithm)algorithmComboBox.SelectedItem;
+    }
   }
 }

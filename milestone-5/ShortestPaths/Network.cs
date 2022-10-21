@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Permissions;
@@ -11,8 +12,14 @@ using System.Windows.Shapes;
 
 namespace ShortestPaths
 {
-  internal class Network
+  public enum AlgorithmType
   {
+    LabelSetting,
+    LabelCorrecting
+  }
+
+    
+  internal class Network {
     public IList<Node> Nodes { get; private set; }
     public IList<Link> Links { get; private set; }
 
@@ -157,6 +164,20 @@ namespace ShortestPaths
         node.Links.ForEach(l => l.IsInPath = true);
         node.IsEndNode = true;
         EndNode = node;
+      }
+    }
+
+    private PathAlgorithm _pathAlgorithm;
+    /// <summary>
+    /// Path Algorithm Strategy
+    /// </summary>
+    public PathAlgorithm AlgorithmType {
+      get => _pathAlgorithm;
+      set
+      {
+        _pathAlgorithm = value;
+        Debug.WriteLine(_pathAlgorithm, "SetPathAlgo");
+
       }
     }
   }
