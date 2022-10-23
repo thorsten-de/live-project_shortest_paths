@@ -33,9 +33,9 @@ namespace ShortestPaths
 
     public Brush TextBrush { get; set; } = Brushes.Black;
 
-    public Brush Stroke { get; set; } = Brushes.Green;
+    public Brush Stroke { get; set; } = Brushes.Black;
 
-    public double StrokeThickness { get; set; } = 2.0;
+    public double StrokeThickness { get; set; } = 1;
 
    
 
