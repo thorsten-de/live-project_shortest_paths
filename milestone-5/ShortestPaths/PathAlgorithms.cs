@@ -38,6 +38,7 @@ namespace ShortestPaths
         {
           Node u = queue.MinBy(n => n.TotalCost);
           checks += queue.Count;
+
           queue.Remove(u);
           visited.Add(u);
           pops++;
@@ -48,6 +49,9 @@ namespace ShortestPaths
             var v = link.ToNode;
             if (!visited.Contains(v) && new_cost < v.TotalCost)
             {
+              if (v.ShortestPathLink != null)
+                v.ShortestPathLink.IsInTree = false;
+              
               v.TotalCost = new_cost;
               v.ShortestPathLink = link;
               link.IsInTree = true;
@@ -75,6 +79,7 @@ namespace ShortestPaths
         while (queue.Count > 0)
         {
           Node u = queue.Dequeue();
+          visited.Add(u);
           pops++;
 
           foreach (var link in u.Links)
@@ -83,6 +88,9 @@ namespace ShortestPaths
             var v = link.ToNode;
             if (!visited.Contains(v) && new_cost < v.TotalCost)
             {
+              if (v.ShortestPathLink != null)              
+                v.ShortestPathLink.IsInTree = false;
+
               v.TotalCost = new_cost;
               v.ShortestPathLink = link;
               link.IsInTree = true;
@@ -116,6 +124,9 @@ namespace ShortestPaths
             var v = link.ToNode;
             if (new_cost < v.TotalCost)
             {
+              if (v.ShortestPathLink != null)
+                v.ShortestPathLink.IsInTree = false;
+              
               v.TotalCost = new_cost;
               v.ShortestPathLink = link;
               link.IsInTree = true;
