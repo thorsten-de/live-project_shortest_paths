@@ -191,6 +191,14 @@ namespace ShortestPaths
       StartNode.TotalCost = 0;
     }
 
+    private void setPathTreeLinks()
+    {
+      Nodes
+        .Select(n => n.ShortestPathLink)
+        .Where(l => l != null)
+        .ForEach(l => l.IsInTree = true);
+    }
+
 
     public void CheckForPath()
     {
@@ -199,6 +207,7 @@ namespace ShortestPaths
 
       initPathTree();
       _pathAlgorithm.FindPathTree(this);
+      setPathTreeLinks();
 
       if (StartNode != null & EndNode != null)
       {

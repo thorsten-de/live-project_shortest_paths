@@ -49,12 +49,8 @@ namespace ShortestPaths
             var v = link.ToNode;
             if (!visited.Contains(v) && new_cost < v.TotalCost)
             {
-              if (v.ShortestPathLink != null)
-                v.ShortestPathLink.IsInTree = false;
-              
               v.TotalCost = new_cost;
               v.ShortestPathLink = link;
-              link.IsInTree = true;
               queue.Add(v);
             }
           }
@@ -88,12 +84,8 @@ namespace ShortestPaths
             var v = link.ToNode;
             if (!visited.Contains(v) && new_cost < v.TotalCost)
             {
-              if (v.ShortestPathLink != null)              
-                v.ShortestPathLink.IsInTree = false;
-
               v.TotalCost = new_cost;
               v.ShortestPathLink = link;
-              link.IsInTree = true;
               queue.Enqueue(v, v.TotalCost);
             }
           }
@@ -124,12 +116,8 @@ namespace ShortestPaths
             var v = link.ToNode;
             if (new_cost < v.TotalCost)
             {
-              if (v.ShortestPathLink != null)
-                v.ShortestPathLink.IsInTree = false;
-              
               v.TotalCost = new_cost;
               v.ShortestPathLink = link;
-              link.IsInTree = true;
               queue.Enqueue(v);
             }
           }
