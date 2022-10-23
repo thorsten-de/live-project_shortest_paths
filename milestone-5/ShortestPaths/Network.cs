@@ -59,7 +59,7 @@ namespace ShortestPaths
         .AppendLine("# Nodes.")
         .AppendJoin("\n", Nodes.Select(n => string.Format("{0:F0},{1:F0},{2}", n.Center.X, n.Center.Y, n.Text)))
         .AppendLine("\n# Links.")
-        .AppendJoin("\n", Links.Select(l => string.Format("{0},{1},{2}", l.FromNode.Index, l.ToNode.Index, l.Cost)))
+        .AppendJoin("\n", Links.Select(l => string.Format("{0},{1},{2:F0}", l.FromNode.Index, l.ToNode.Index, l.Cost)))
       .ToString();
 
     public void SaveToFile(string filename) => 

@@ -14,9 +14,9 @@ namespace ShortestPaths
     public Network Network { get; private set; }
     public Node FromNode { get; private set; }
     public Node ToNode { get; private set; }
-    public int Cost { get; private set; }
+    public double Cost { get; private set; }
 
-    public Link(Network network, Node fromNode, Node toNode, int cost)
+    public Link(Network network, Node fromNode, Node toNode, double cost)
     {
       Network = network;
       FromNode = fromNode;
