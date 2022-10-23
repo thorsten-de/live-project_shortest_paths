@@ -55,21 +55,22 @@ namespace ShortestPaths
     private void Generate_4x4_Click(object sender, RoutedEventArgs e)
     {
       MyNetwork = BuildGridNetwork("4x4_test.net", 400, 400, 4, 4);
+      algorithmComboBox.SelectedItem = MyNetwork.AlgorithmType;
       DrawNetwork();
     }
 
     private void Generate_6x10_Click(object sender, RoutedEventArgs e)
     {
       MyNetwork = BuildGridNetwork("6x10_test.net", 600, 400, 6, 10);
+      algorithmComboBox.SelectedItem = MyNetwork.AlgorithmType;
       DrawNetwork();        
     }
     
     private void Generate_10x15_Click(object sender, RoutedEventArgs e)
     {
-      MyNetwork = BuildGridNetwork("10x15_test.net", 600, 400, 10, 15);
+      MyNetwork = BuildGridNetwork("10x15_test.net", 600, 400, 20, 30);
+      algorithmComboBox.SelectedItem = MyNetwork.AlgorithmType;
       DrawNetwork();        
     }
-
-
   }
 }

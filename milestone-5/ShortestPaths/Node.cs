@@ -12,8 +12,11 @@ namespace ShortestPaths
     public int Index { get; internal set; }
     public Network Network { get; private set; }
     public Point Center { get; private set; }
-    public string Text { get; private set; }
+    public string Text { get; set; }
     public IList<Link> Links { get; private set; }
+
+    internal double TotalCost { get; set; }
+    internal Link? ShortestPathLink { get; set; }
 
     public Node(Network network, Point center, string text)
     {

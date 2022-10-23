@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Security.Permissions;
 using System.Text;
 using System.Windows;
@@ -19,7 +21,7 @@ namespace ShortestPaths
   }
 
     
-  internal class Network {
+  internal class Network { 
     public IList<Node> Nodes { get; private set; }
     public IList<Link> Links { get; private set; }
 
@@ -129,9 +131,9 @@ namespace ShortestPaths
         Rect.Union(bounds, new Rect(node.Center, new Point(0, 0)))
       );
 
-    private Node StartNode { get; set; }
+    public Node StartNode { get; set; }
     
-    private Node EndNode { get; set; }
+    public Node EndNode { get; set; }
 
     internal void node_MouseDown(object sender, MouseButtonEventArgs e)
     {
@@ -147,27 +149,26 @@ namespace ShortestPaths
       {
         if (StartNode != null)
         {
-          StartNode.Links.ForEach(l => l.IsInTree = false);
           StartNode.IsStartNode = false;
         }
-        node.Links.ForEach(l => l.IsInTree = true);
         node.IsStartNode = true;
         StartNode = node;
+        CheckForPath();
       }
       if (e.RightButton == MouseButtonState.Pressed)
       {
         if (EndNode != null)
         {
-          EndNode.Links.ForEach(l => l.IsInPath = false);
           EndNode.IsEndNode = false;
         }
-        node.Links.ForEach(l => l.IsInPath = true);
         node.IsEndNode = true;
         EndNode = node;
+        CheckForPath();
       }
     }
 
-    private PathAlgorithm _pathAlgorithm;
+    private PathAlgorithm _pathAlgorithm = PathAlgorithms.LabelSetting;
+
     /// <summary>
     /// Path Algorithm Strategy
     /// </summary>
@@ -176,9 +177,44 @@ namespace ShortestPaths
       set
       {
         _pathAlgorithm = value;
-        Debug.WriteLine(_pathAlgorithm, "SetPathAlgo");
-
+        CheckForPath();
       }
+    }
+    public void initPathTree()
+    {
+      Links.ForEach(l => l.IsInTree = l.IsInPath = false);
+      foreach (var n in Nodes)
+      {
+        n.TotalCost = double.PositiveInfinity;
+        n.ShortestPathLink = null;
+      }
+      StartNode.TotalCost = 0;
+    }
+
+
+    public void CheckForPath()
+    {
+      if (StartNode == null)
+        return;
+
+      initPathTree();
+      _pathAlgorithm.FindPathTree(this);
+
+      if (StartNode != null & EndNode != null)
+      {
+        FindPath();
+      }
+    }
+
+    public void FindPath()
+    {
+      var node = EndNode;
+      while (node != StartNode)
+      {
+        node.ShortestPathLink.IsInPath = true;
+        node = node.ShortestPathLink.FromNode;
+      }
+      Debug.WriteLine("FindPath: Cost {0}", EndNode.TotalCost);
     }
   }
 }
