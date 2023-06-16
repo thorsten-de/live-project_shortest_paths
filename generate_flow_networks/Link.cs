@@ -80,7 +80,7 @@ internal class Link
         var c = FromNode.Center + d / 3;
 
         canvas.DrawEllipse(c.CenteredBounds(RADIUS), Brushes.White, Brushes.White, 0);
-        canvas.DrawString(Capacity.ToString(), 2 * RADIUS, 2 * RADIUS, c, angle, 12, TextBrush);
+        canvas.DrawString($"{Flow}/{Capacity}", 2 * RADIUS, 2 * RADIUS, c, angle, 12, TextBrush);
     }
 
     private void SetLinkAppearance()
