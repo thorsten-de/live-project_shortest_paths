@@ -24,7 +24,7 @@ partial class MainWindow
 
         for (var y = 0; y < numRows; y++)
         for (var x = 0; x < numCols; x++)
-            new Node(network, bounds.TopLeft + new Vector(x * stepX, y * stepY), (network.Nodes.Count + 1).ToString());
+            new Node(network, bounds.TopLeft + new Vector(x * stepX, y * stepY), network.Nodes.Count.ToString());
 
         foreach (var node in network.Nodes)
         {

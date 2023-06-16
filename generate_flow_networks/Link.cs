@@ -35,7 +35,7 @@ internal class Link
 
     public Brush TextBrush { get; set; } = Brushes.Black;
 
-    public Brush Stroke { get; set; } = Brushes.Black;
+    public Brush Stroke { get; set; } = Brushes.DarkGreen;
 
     public double StrokeThickness { get; set; } = 1;
 
