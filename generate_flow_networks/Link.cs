@@ -29,9 +29,9 @@ internal class Link
     public Network Network { get; }
     public Node FromNode { get; }
     public Node ToNode { get; }
-    public int Capacity { get; }
+    public double Capacity { get; }
     
-    public int Flow { get; private set; }
+    public double Flow { get; private set; }
 
     public Brush TextBrush { get; set; } = Brushes.Black;
 
