@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FlowNetworks"
         mc:Ignorable="d"
-        Title="Generate Flow Networks" Height="1200" Width="800">
+        Title="Generate Flow Networks" Height="800" Width="1200">
     <Window.CommandBindings>
         <CommandBinding Command="Open" CanExecute="OpenCommand_CanExecute" Executed="OpenCommand_Executed" />
     </Window.CommandBindings>
@@ -14,17 +13,16 @@
             <MenuItem Header="_File">
                 <MenuItem Command="Open" />
                 <MenuItem Header="Make _Tests">
-                    <MenuItem Header="4x4"  Click="Generate_4x4_Click" />
-                    <MenuItem Header="6x10"  Click="Generate_6x10_Click" />
-                    <MenuItem Header="20x30"  Click="Generate_10x15_Click" />
+                    <MenuItem Header="4x4" Click="Generate_4x4_Click" />
+                    <MenuItem Header="6x10" Click="Generate_6x10_Click" />
+                    <MenuItem Header="20x30" Click="Generate_10x15_Click" />
                 </MenuItem>
                 <Separator />
                 <MenuItem Header="_Exit" Click="MenuItemExit_Click" />
             </MenuItem>
         </Menu>
         <ToolBar DockPanel.Dock="Top">
-            <ComboBox x:Name="algorithmComboBox" SelectionChanged="algorithmComboBox_SelectionChanged">
-            </ComboBox>
+            <ComboBox x:Name="algorithmComboBox" SelectionChanged="algorithmComboBox_SelectionChanged" />
         </ToolBar>
         <Border BorderBrush="Gray" BorderThickness="2" Margin="3">
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
