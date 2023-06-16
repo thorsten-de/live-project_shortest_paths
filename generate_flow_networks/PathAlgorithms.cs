@@ -41,7 +41,7 @@ public class PathAlgorithms
 
                 foreach (var link in u.Links)
                 {
-                    var new_cost = u.TotalCost + link.Cost;
+                    var new_cost = u.TotalCost + link.Capacity;
                     var v = link.ToNode;
                     if (!visited.Contains(v) && new_cost < v.TotalCost)
                     {
@@ -79,7 +79,7 @@ public class PathAlgorithms
 
                 foreach (var link in u.Links)
                 {
-                    var new_cost = u.TotalCost + link.Cost;
+                    var new_cost = u.TotalCost + link.Capacity;
                     var v = link.ToNode;
                     if (!visited.Contains(v) && new_cost < v.TotalCost)
                     {
@@ -114,7 +114,7 @@ public class PathAlgorithms
 
                 foreach (var link in u.Links)
                 {
-                    var new_cost = u.TotalCost + link.Cost;
+                    var new_cost = u.TotalCost + link.Capacity;
                     var v = link.ToNode;
                     if (new_cost < v.TotalCost)
                     {

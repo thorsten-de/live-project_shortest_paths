@@ -9,8 +9,7 @@ partial class MainWindow
 
     private void MakeRandomizedLink(Random rand, Network network, Node from, Node to)
     {
-        var distance = to.Center - from.Center;
-        new Link(network, from, to, (1.0 + 0.2 * rand.NextDouble()) * distance.Length);
+        new Link(network, from, to, rand.Next(1, 6));
     }
 
     private Network BuildGridNetwork(string filename, double width, double height, int numRows, int numCols)
@@ -32,13 +31,9 @@ partial class MainWindow
             var row = node.Index / numCols;
             var col = node.Index % numCols;
 
-            if (col > 0) MakeRandomizedLink(rand, network, node, network.Nodes[node.Index - 1]);
             if (col < numCols - 1) MakeRandomizedLink(rand, network, node, network.Nodes[node.Index + 1]);
-
-            if (row > 0) MakeRandomizedLink(rand, network, node, network.Nodes[node.Index - numCols]);
             if (row < numRows - 1) MakeRandomizedLink(rand, network, node, network.Nodes[node.Index + numCols]);
         }
-
 
         network.SaveToFile(filename);
 

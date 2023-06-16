@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
+
 namespace FlowNetworks;
 
 internal class Link
@@ -13,12 +14,13 @@ internal class Link
 
     private bool isInTree;
 
-    public Link(Network network, Node fromNode, Node toNode, double cost)
+    public Link(Network network, Node fromNode, Node toNode, int capacity)
     {
         Network = network;
         FromNode = fromNode;
         ToNode = toNode;
-        Cost = cost;
+        Capacity = capacity;
+        Flow = 0;
 
         FromNode.AddLink(this);
         Network.AddLink(this);
@@ -27,7 +29,9 @@ internal class Link
     public Network Network { get; }
     public Node FromNode { get; }
     public Node ToNode { get; }
-    public double Cost { get; }
+    public int Capacity { get; }
+    
+    public int Flow { get; private set; }
 
     public Brush TextBrush { get; set; } = Brushes.Black;
 
@@ -59,7 +63,7 @@ internal class Link
 
     public override string ToString()
     {
-        return $"{FromNode} --> {ToNode} ({Cost})";
+        return $"{FromNode} --> {ToNode} ({Capacity})";
     }
 
 
@@ -76,7 +80,7 @@ internal class Link
         var c = FromNode.Center + d / 3;
 
         canvas.DrawEllipse(c.CenteredBounds(RADIUS), Brushes.White, Brushes.White, 0);
-        canvas.DrawString(Cost.ToString(), 2 * RADIUS, 2 * RADIUS, c, angle, 12, TextBrush);
+        canvas.DrawString(Capacity.ToString(), 2 * RADIUS, 2 * RADIUS, c, angle, 12, TextBrush);
     }
 
     private void SetLinkAppearance()
