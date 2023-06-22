@@ -8,67 +8,108 @@ namespace FlowNetworks;
 
 internal class Link
 {
-    public const double RADIUS = 10;
+    private const double RADIUS = 10;
 
-    private bool isInPath;
-
-    private bool isInTree;
+    private readonly Network _network;
+    private readonly Node _fromNode;
+    private readonly Node _toNode;
+    private readonly double _capacity;
+    private double _flow;
+    
+    private Brush _textBrush = Brushes.Black;
+    private Brush _stroke = Brushes.Silver;
+    private double _strokeThickness = 2;
+    private Line _myLine;
 
     public Link(Network network, Node fromNode, Node toNode, int capacity)
     {
-        Network = network;
-        FromNode = fromNode;
-        ToNode = toNode;
-        Capacity = capacity;
+        _network = network;
+        _fromNode = fromNode;
+        _toNode = toNode;
+        _capacity = capacity;
         Flow = 0;
 
         FromNode.AddLink(this);
+        ToNode.AddBacklink(this);
         Network.AddLink(this);
     }
 
-    public Network Network { get; }
-    public Node FromNode { get; }
-    public Node ToNode { get; }
-    public double Capacity { get; }
+    public Network Network => _network;
+
+    public Node FromNode => _fromNode;
+
+    public Node ToNode => _toNode;
+
+    public double Capacity => _capacity;
+
+    public double Flow
+    {
+        get => _flow;
+        set
+        {
+            _flow = value; 
+            SetLinkAppearance();
+        }
+    }
+
+    public void UseRegularFrom(Node from)
+    {
+        VisitNode(ToNode, from);
+    }
+
+    public void UseBacklinkFrom(Node from)
+    {
+        VisitNode(FromNode, from);
+        IsBacklink = true;
+    }
+
+    private void VisitNode(Node target, Node from)
+    {
+        target.FromNode = from;
+        target.FromLink = this;
+        target.Visited = true;
+    }
+
+    public void AlterFlow(double delta) =>
+        Flow += IsBacklink ? -delta : +delta;
+
+    public double ResidualCapacity => 
+        Capacity - Flow;
+
+    public double Delta => IsBacklink ? Flow : ResidualCapacity;
+
+    public bool IsBacklink { get; set; }
     
-    public double Flow { get; private set; }
-
-    public Brush TextBrush { get; set; } = Brushes.Black;
-
-    public Brush Stroke { get; set; } = Brushes.DarkGreen;
-
-    public double StrokeThickness { get; set; } = 1;
-
-    private Line MyLine { get; set; }
-
-    public bool IsInTree
+    public Brush TextBrush
     {
-        get => isInTree;
-        set
-        {
-            isInTree = value;
-            SetLinkAppearance();
-        }
+        get => _textBrush;
+        set => _textBrush = value;
     }
 
-    public bool IsInPath
+    public Brush Stroke
     {
-        get => isInPath;
-        set
-        {
-            isInPath = value;
-            SetLinkAppearance();
-        }
+        get => _stroke;
+        set => _stroke = value;
     }
 
-    public override string ToString()
+    public double StrokeThickness
     {
-        return $"{FromNode} --> {ToNode} ({Capacity})";
+        get => _strokeThickness;
+        set => _strokeThickness = value;
     }
 
+    private Line MyLine
+    {
+        get => _myLine;
+        set => _myLine = value;
+    }
+
+    public override string ToString() =>
+        $"{FromNode} {(IsBacklink ? "<--" : "-->")} {ToNode} ({Flow}/{Capacity})";
 
     public void Draw(Canvas canvas)
     {
+        canvas.DrawLine(FromNode.Center, ToNode.Center, Stroke, 2 * Capacity);
         MyLine = canvas.DrawLine(FromNode.Center, ToNode.Center, Stroke, StrokeThickness);
     }
 
@@ -80,27 +121,31 @@ internal class Link
         var c = FromNode.Center + d / 3;
 
         canvas.DrawEllipse(c.CenteredBounds(RADIUS), Brushes.White, Brushes.White, 0);
-        canvas.DrawString($"{Flow}/{Capacity}", 2 * RADIUS, 2 * RADIUS, c, angle, 12, TextBrush);
+        MyLabel = canvas.DrawString(Display, 2 * RADIUS, 2 * RADIUS, c, angle, 12, TextBrush);
     }
+
+    private string Display => $"{Flow}/{Capacity}";
+
+    private Label MyLabel;
 
     private void SetLinkAppearance()
     {
         if (MyLine == null) return;
 
-        if (isInPath)
+        if (Flow > 0)
         {
             MyLine.Stroke = Brushes.Red;
-            MyLine.StrokeThickness = 6;
-        }
-        else if (isInTree)
-        {
-            MyLine.Stroke = Brushes.Lime;
-            MyLine.StrokeThickness = 6;
+            MyLine.StrokeThickness = 2 * Flow;
         }
         else
         {
             MyLine.Stroke = Stroke;
             MyLine.StrokeThickness = StrokeThickness;
+        }
+
+        if (MyLabel != null)
+        {
+            MyLabel.Content = Display;
         }
     }
 }
