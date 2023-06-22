@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -13,14 +10,12 @@ internal class Link
 {
     private const double RADIUS = 10;
 
-    private bool isInPath;
-
-    private bool isInTree;
     private readonly Network _network;
     private readonly Node _fromNode;
     private readonly Node _toNode;
     private readonly double _capacity;
     private double _flow;
+    
     private Brush _textBrush = Brushes.Black;
     private Brush _stroke = Brushes.Silver;
     private double _strokeThickness = 2;
@@ -55,7 +50,6 @@ internal class Link
             _flow = value; 
             SetLinkAppearance();
         }
-        
     }
 
     public void UseRegularFrom(Node from)
@@ -110,31 +104,9 @@ internal class Link
         set => _myLine = value;
     }
 
-    public bool IsInTree
-    {
-        get => isInTree;
-        set
-        {
-            isInTree = value;
-            SetLinkAppearance();
-        }
-    }
+    public override string ToString() =>
+        $"{FromNode} {(IsBacklink ? "<--" : "-->")} {ToNode} ({Flow}/{Capacity})";
 
-    public bool IsInPath
-    {
-        get => isInPath;
-        set
-        {
-            isInPath = value;
-            SetLinkAppearance();
-        }
-    }
-
-    public override string ToString()
-    {
-        return $"{FromNode} --> {ToNode} ({Flow}/{Capacity}){(IsBacklink ? "*": "")}";
-    }
-    
     public void Draw(Canvas canvas)
     {
         canvas.DrawLine(FromNode.Center, ToNode.Center, Stroke, 2 * Capacity);

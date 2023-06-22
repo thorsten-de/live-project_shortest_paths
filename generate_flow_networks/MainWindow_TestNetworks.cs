@@ -43,42 +43,36 @@ partial class MainWindow
     private void Generate_3x3_Click(object sender, RoutedEventArgs e)
     {
         MyNetwork = BuildGridNetwork("3x3_test.net", 300, 300, 3, 3);
-        algorithmComboBox.SelectedItem = MyNetwork.AlgorithmType;
         DrawNetwork();
     }
     
     private void Generate_4x4_Click(object sender, RoutedEventArgs e)
     {
         MyNetwork = BuildGridNetwork("4x4_test.net", 300, 300, 4, 4);
-        algorithmComboBox.SelectedItem = MyNetwork.AlgorithmType;
         DrawNetwork();
     }
     
     private void Generate_5x8_Click(object sender, RoutedEventArgs e)
     {
         MyNetwork = BuildGridNetwork("5x8_test.net", 600, 400, 5, 8);
-        algorithmComboBox.SelectedItem = MyNetwork.AlgorithmType;
         DrawNetwork();
     }
 
     private void Generate_6x10_Click(object sender, RoutedEventArgs e)
     {
         MyNetwork = BuildGridNetwork("6x10_test.net", 600, 400, 6, 10);
-        algorithmComboBox.SelectedItem = MyNetwork.AlgorithmType;
         DrawNetwork();
     }
 
     private void Generate_10x15_Click(object sender, RoutedEventArgs e)
     {
         MyNetwork = BuildGridNetwork("10x15_test.net", 600, 400, 10, 15);
-        algorithmComboBox.SelectedItem = MyNetwork.AlgorithmType;
         DrawNetwork();
     }
 
     private void Generate_20x30_Click(object sender, RoutedEventArgs e)
     {
         MyNetwork = BuildGridNetwork("20x30_test.net", 600, 400, 20, 30);
-        algorithmComboBox.SelectedItem = MyNetwork.AlgorithmType;
         DrawNetwork();
     }
 }

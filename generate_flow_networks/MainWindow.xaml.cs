@@ -16,9 +16,6 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-
-        algorithmComboBox.ItemsSource = PathAlgorithms.All;
-        algorithmComboBox.SelectedItem = MyNetwork.AlgorithmType;
     }
 
     private void OpenCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -44,9 +41,6 @@ public partial class MainWindow : Window
             MyNetwork = new Network();
         }
 
-
-        algorithmComboBox.SelectedItem = MyNetwork.AlgorithmType;
-
         DrawNetwork();
     }
 
@@ -59,11 +53,5 @@ public partial class MainWindow : Window
     {
         mainCanvas.Children.Clear();
         MyNetwork.Draw(mainCanvas);
-    }
-
-    private void algorithmComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        MyNetwork.AlgorithmType = (PathAlgorithm)algorithmComboBox.SelectedItem;
-        DrawNetwork();
     }
 }

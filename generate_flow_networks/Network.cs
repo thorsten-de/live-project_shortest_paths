@@ -20,8 +20,6 @@ internal class Network
 {
     private const double MARGIN = 20;
 
-    private PathAlgorithm _pathAlgorithm = PathAlgorithms.LabelSetting;
-
     public Network()
     {
         Clear();
@@ -34,20 +32,6 @@ internal class Network
 
     public Node? EndNode { get; set; }
 
-    /// <summary>
-    ///     Path Algorithm Strategy
-    /// </summary>
-    public PathAlgorithm AlgorithmType
-    {
-        get => _pathAlgorithm;
-        set
-        {
-            _pathAlgorithm = value;
-            CheckForPath();
-        }
-    }
-
-    // I prefer aptly named static methods over constructor overloads
     public static Network FromFile(string filename)
     {
         var network = new Network();
@@ -166,7 +150,8 @@ internal class Network
     {
         if (e.LeftButton == MouseButtonState.Pressed)
         {
-            if (StartNode != null) StartNode.IsStartNode = false;
+            if (StartNode != null) 
+                StartNode.IsStartNode = false;
 
             node.IsStartNode = true;
             StartNode = node;
@@ -181,39 +166,6 @@ internal class Network
             EndNode = node;
             CalculateFlow();
         }
-    }
-
-    public void initPathTree()
-    {
-        Links.ForEach(l => l.IsInTree = l.IsInPath = false);
-        foreach (var n in Nodes)
-        {
-            n.TotalCost = double.PositiveInfinity;
-            n.ShortestPathLink = null;
-        }
-
-        StartNode.TotalCost = 0;
-    }
-
-    private void setPathTreeLinks()
-    {
-        Nodes
-            .Select(n => n.ShortestPathLink)
-            .Where(l => l != null)
-            .ForEach(l => l.IsInTree = true);
-    }
-
-
-    public void CheckForPath()
-    {
-        if (StartNode == null)
-            return;
-
-        initPathTree();
-        _pathAlgorithm.FindPathTree(this);
-        setPathTreeLinks();
-
-        if ((StartNode != null) & (EndNode != null)) FindPath();
     }
 
     public void CalculateFlow()
@@ -289,19 +241,9 @@ internal class Network
         Debug.WriteLine($"Total flow is: {TotalFlow}");
     }
     
-    public double TotalFlow => StartNode?.Links.Sum(l => l.Flow) ?? double.NaN;
+    public double TotalFlow =>
+        StartNode?.Links.Sum(l => l.Flow) ?? double.NaN;
 
-    public void FindPath()
-    {
-        var node = EndNode;
-        while (node != StartNode)
-        {
-            node.ShortestPathLink.IsInPath = true;
-            node = node.ShortestPathLink.FromNode;
-        }
-
-        Debug.WriteLine("FindPath: Cost {0}", EndNode.TotalCost);
-    }
     
     
 }
