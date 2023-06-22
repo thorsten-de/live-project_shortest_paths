@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace FlowNetworks;
+namespace WorkAssignments;
 
 partial class MainWindow
 {

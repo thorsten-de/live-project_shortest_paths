@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace FlowNetworks;
+namespace WorkAssignments;
 
 /// <summary>
 ///     Interaction logic for App.xaml

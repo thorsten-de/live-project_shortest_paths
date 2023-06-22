@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Win32;
 
-namespace FlowNetworks;
+namespace WorkAssignments;
 
 /// <summary>
 ///     Interaction logic for MainWindow.xaml

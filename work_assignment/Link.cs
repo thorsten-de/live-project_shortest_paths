@@ -4,7 +4,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 
-namespace FlowNetworks;
+namespace WorkAssignments;
 
 internal class Link
 {
