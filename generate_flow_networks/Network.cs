@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -29,9 +30,9 @@ internal class Network
     public IList<Node> Nodes { get; private set; }
     public IList<Link> Links { get; private set; }
 
-    public Node StartNode { get; set; }
+    public Node? StartNode { get; set; }
 
-    public Node EndNode { get; set; }
+    public Node? EndNode { get; set; }
 
     /// <summary>
     ///     Path Algorithm Strategy
@@ -169,7 +170,7 @@ internal class Network
 
             node.IsStartNode = true;
             StartNode = node;
-            CheckForPath();
+            CalculateFlow();
         }
 
         if (e.RightButton == MouseButtonState.Pressed)
@@ -178,7 +179,7 @@ internal class Network
 
             node.IsEndNode = true;
             EndNode = node;
-            CheckForPath();
+            CalculateFlow();
         }
     }
 
@@ -215,6 +216,81 @@ internal class Network
         if ((StartNode != null) & (EndNode != null)) FindPath();
     }
 
+    public void CalculateFlow()
+    {
+        if (StartNode is null || EndNode is null || StartNode == EndNode)
+            return;
+
+        #region inner function
+        LinkedList<Link>? FindResidualPath()
+        {
+            LinkedList<Link> path = new();
+            foreach (var node in Nodes)
+            {
+                node.Visited = false;
+                node.FromNode = null;
+                node.FromLink = null;
+            }
+
+            foreach (var link in  Links)
+            {
+                link.IsBacklink = false;
+            }
+            
+            Queue<Node> queue = new();
+            StartNode.Visited = true;
+            queue.Enqueue(StartNode);
+            while (queue.Any() && !EndNode.Visited)
+            {
+                var u = queue.Dequeue();
+                
+                foreach (var link in u.Links
+                             .Where(link => !link.ToNode.Visited && link.ResidualCapacity > 0))
+                {
+                    link.UseRegularFrom(u);
+                    queue.Enqueue(link.ToNode);
+                }
+
+                foreach (var link in u.Backlinks
+                             .Where(link => !link.FromNode.Visited && link.Flow > 0))
+                {
+                    link.UseBacklinkFrom(u);
+                    queue.Enqueue(link.FromNode);
+                }
+            }
+
+            if (EndNode.FromNode == null)
+                return null;
+            
+            var pathNode = EndNode;
+            while (pathNode != StartNode)
+            {
+                path.AddFirst(pathNode.FromLink);
+                pathNode = pathNode.FromNode;
+            }
+            return path;
+        }
+        #endregion
+        
+        foreach (var link in  Links)
+            link.Flow = 0;
+        
+        for (;;)
+        {
+            var path = FindResidualPath();
+            if (path is null)
+                break;
+            
+            double cf = path.Min(p => p.Delta);
+            foreach (var link in path)
+                link.AlterFlow(cf);
+        }
+        
+        Debug.WriteLine($"Total flow is: {TotalFlow}");
+    }
+    
+    public double TotalFlow => StartNode?.Links.Sum(l => l.Flow) ?? double.NaN;
+
     public void FindPath()
     {
         var node = EndNode;
@@ -226,4 +302,6 @@ internal class Network
 
         Debug.WriteLine("FindPath: Cost {0}", EndNode.TotalCost);
     }
+    
+    
 }

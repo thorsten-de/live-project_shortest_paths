@@ -17,6 +17,8 @@ internal class Node
 
     public Node(Network network, Point center, string text)
     {
+        
+        Backlinks = new LinkedList<Link>();
         Links = new List<Link>();
         Network = network;
         Center = center;
@@ -31,9 +33,14 @@ internal class Node
     public string Text { get; set; }
     public IList<Link> Links { get; }
 
+    public Node? FromNode { get; set; }
+    public Link? FromLink { get; set; }
+    public bool Visited { get; set; }
+
+    public LinkedList<Link> Backlinks { get; }
+
     internal double TotalCost { get; set; }
     internal Link? ShortestPathLink { get; set; }
-
 
     public Brush Stroke { get; set; } = Brushes.Black;
     public double StrokeThickness { get; set; } = 2.0;
@@ -72,6 +79,11 @@ internal class Node
     public void AddLink(Link link)
     {
         Links.Add(link);
+    }
+
+    public void AddBacklink(Link link)
+    {
+        Backlinks.AddLast(link);
     }
 
     public void Draw(Canvas canvas, bool drawLabels)
