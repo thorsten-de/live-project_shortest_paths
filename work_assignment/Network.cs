@@ -6,19 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace WorkAssignments;
-
-public enum AlgorithmType
-{
-    LabelSetting,
-    LabelCorrecting
-}
 
 internal class Network
 {
     private const double MARGIN = 20;
+    private const double ySpace = 50;
+    private const double xSpace = 100;
+    
+    
 
     public Network()
     {
@@ -84,7 +81,7 @@ internal class Network
             for (var i = 0; i < nodeCount; i++)
             {
                 var nodeData = ReadNextLine(reader).Split(',');
-                new Node(this, new Point(double.Parse(nodeData[0]), double.Parse(nodeData[1])), nodeData[2]);
+                //new Node(this, new Point(double.Parse(nodeData[0]), double.Parse(nodeData[1])), nodeData[2]);
             }
 
             for (var i = 0; i < linkCount; i++)
@@ -115,6 +112,78 @@ internal class Network
         Deserialize(File.ReadAllText(filename));
     }
 
+    public void LoadJobsFile(string filename, Canvas canvas, TextWriter writer)
+    {
+        Clear();
+        File.ReadAllLines(filename)
+            .Select(line => line.Split('#').First())
+            .Where(line => !string.IsNullOrEmpty(line))
+            .Select(line => line.Split(";"))
+            .ForEach(parts =>
+                new Node(this, new Point(), parts[0], parts[1], parts[2].Split(',')
+                ));
+
+        var employees = Nodes.Where(n => n.Text.StartsWith("E")).ToArray();
+        var jobs = Nodes.Where(n => n.Text.StartsWith("J")).ToArray();
+
+        foreach ((Node employee, Node job) in
+                 from e in employees
+                 from j in jobs
+                 where j.Tools.IsSubsetOf(e.Tools)
+                 select (e, j))
+        {
+            new Link(this, employee, job, 1);
+        }
+
+        double x = MARGIN + xSpace;
+        double yCenter = MARGIN + Math.Max(employees.Length, jobs.Length) * ySpace / 2.0;
+
+        employees.Aggregate(yCenter - employees.Length * MARGIN, (y, node) =>
+        {
+            node.Center = new Point(x, y);
+            return y + ySpace;
+        });
+        x += xSpace;
+
+        jobs.Aggregate(yCenter - jobs.Length * MARGIN, (y, node) =>
+        {
+            node.Center = new Point(x, y);
+            return y + ySpace;
+        });
+        x += xSpace;
+
+        StartNode = new Node(this, new Point(MARGIN, yCenter), "S", "Source");
+        employees.ForEach(e => new Link(this, StartNode, e, 1));
+
+        EndNode = new Node(this, new Point(x, yCenter), "E", "Sink");
+        jobs.ForEach(j => new Link(this, j, EndNode, 1));
+
+        canvas.Children.Clear();
+        Draw(canvas);
+
+        CalculateFlow();
+
+        writer.WriteLine($"Total flow: {TotalFlow}");
+        writer.WriteLine("\nEmployee assignments");
+        foreach (Node employee in employees)
+        {
+            Link? assignment = employee.Links.FirstOrDefault(l => l.Flow > 0);
+            if (assignment is null)
+                writer.WriteLine("{0,-2} {1,-5}     takes a break", employee.Text, employee.FullName);
+            else
+                writer.WriteLine("{0,-2} {1,-5} --> {2,-2} {3}",
+                    employee.Text, employee.FullName,
+                    assignment.ToNode.Text, assignment.ToNode.FullName);
+        }
+
+        writer.WriteLine("\nUnassigned jobs:");
+        foreach (var job in jobs)
+        {
+            if (job.Links.All(l => l.Flow == 0))
+                writer.WriteLine("{0,-2} {1}", job.Text, job.FullName);
+        }
+    }
+
     public void Draw(Canvas canvas)
     {
         var drawLabels = Nodes.Count < 100;
@@ -124,10 +193,6 @@ internal class Network
         canvas.Height = bounds.Height + MARGIN;
 
         foreach (var link in Links) link.Draw(canvas);
-
-        if (drawLabels)
-            foreach (var link in Links)
-                link.DrawLabel(canvas);
 
         foreach (var node in Nodes) node.Draw(canvas, drawLabels);
     }
@@ -139,33 +204,6 @@ internal class Network
             (bounds, node) =>
                 Rect.Union(bounds, new Rect(node.Center, new Point(0, 0)))
         );
-    }
-
-    internal void node_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-        if (((FrameworkElement)sender).Tag is Node node) OnNodeClicked(node, e);
-    }
-
-    protected void OnNodeClicked(Node node, MouseButtonEventArgs e)
-    {
-        if (e.LeftButton == MouseButtonState.Pressed)
-        {
-            if (StartNode != null) 
-                StartNode.IsStartNode = false;
-
-            node.IsStartNode = true;
-            StartNode = node;
-            CalculateFlow();
-        }
-
-        if (e.RightButton == MouseButtonState.Pressed)
-        {
-            if (EndNode != null) EndNode.IsEndNode = false;
-
-            node.IsEndNode = true;
-            EndNode = node;
-            CalculateFlow();
-        }
     }
 
     public void CalculateFlow()
@@ -239,11 +277,9 @@ internal class Network
         }
         
         Debug.WriteLine($"Total flow is: {TotalFlow}");
+        
     }
     
     public double TotalFlow =>
         StartNode?.Links.Sum(l => l.Flow) ?? double.NaN;
-
-    
-    
 }

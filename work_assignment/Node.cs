@@ -15,9 +15,10 @@ internal class Node
 
     private bool isStartNode;
 
-    public Node(Network network, Point center, string text)
+    public Node(Network network, Point center, string text, string fullName, params string[] tools)
     {
-        
+        FullName = fullName;
+        Tools = new HashSet<string>(tools);
         Backlinks = new LinkedList<Link>();
         Links = new List<Link>();
         Network = network;
@@ -29,13 +30,17 @@ internal class Node
 
     public int Index { get; internal set; }
     public Network Network { get; }
-    public Point Center { get; }
+    public Point Center { get; set; }
     public string Text { get; set; }
+
+    public string FullName { get; set; }
     public IList<Link> Links { get; }
 
     public Node? FromNode { get; set; }
     public Link? FromLink { get; set; }
     public bool Visited { get; set; }
+
+    public HashSet<string> Tools { get; private set; }
 
     public LinkedList<Link> Backlinks { get; }
 
@@ -91,13 +96,11 @@ internal class Node
         var radius = drawLabels ? LARGE_RADIUS : SMALL_RADIUS;
         MyEllipse = canvas.DrawEllipse(Center.CenteredBounds(radius), Background, Stroke, StrokeThickness);
         MyEllipse.Tag = this;
-        MyEllipse.MouseDown += Network.node_MouseDown;
 
         if (drawLabels)
         {
             MyLabel = canvas.DrawString(Text, 2 * radius, 2 * radius, Center, 0, 12, Foregrond);
             MyLabel.Tag = this;
-            MyLabel.MouseDown += Network.node_MouseDown;
         }
     }
 

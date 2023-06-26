@@ -30,18 +30,16 @@ public partial class MainWindow : Window
             var dialog =
                 new OpenFileDialog
                 {
-                    DefaultExt = ".net",
-                    Filter = "Network Files|*.net|All Files|*.*"
+                    DefaultExt = ".jobs",
+                    Filter = "Network Files|*.jobs|All Files|*.*"
                 };
-            if (dialog.ShowDialog() == true) MyNetwork = Network.FromFile(dialog.FileName);
+            if (dialog.ShowDialog() == true) 
+                MyNetwork.LoadJobsFile(dialog.FileName, mainCanvas, Console.Out);
         }
         catch (Exception ex)
         {
             MessageBox.Show(ex.Message);
-            MyNetwork = new Network();
         }
-
-        DrawNetwork();
     }
 
     private void MenuItemExit_Click(object sender, RoutedEventArgs e)
