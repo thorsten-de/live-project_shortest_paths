@@ -1,0 +1,17 @@
+﻿Total flow: 7
+
+Employee assignments
+E1 Alice --> J5 Deionize point-of-view ray
+E2 Ben   --> J9 Debug backswimmer
+E3 Cindy --> J8 Re-tension acceleration couches
+E4 Dan   --> J1 Fix hyperdrive
+E5 Emma  --> J2 Boost transporter range
+E6 Frank --> J6 Finish lightsaber colorimetry
+E7 Gina  --> J3 Deanodize banana
+E8 Hank      takes a break
+
+Unassigned jobs:
+J4 Calibrate hovercart
+J7 Clean sonic handguns
+J10 Clean perambulator mediatron
+

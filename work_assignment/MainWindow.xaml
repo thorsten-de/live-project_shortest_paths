@@ -1,0 +1,33 @@
+﻿<Window x:Class="WorkAssignments.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Work assignments with Flow Networks" Height="800" Width="1200">
+    <Window.CommandBindings>
+        <CommandBinding Command="Open" CanExecute="OpenCommand_CanExecute" Executed="OpenCommand_Executed" />
+    </Window.CommandBindings>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Command="Open" />
+                <MenuItem Header="Make _Tests">
+                    <MenuItem Header="3x3" Click="Generate_3x3_Click" />
+                    <MenuItem Header="4x4" Click="Generate_4x4_Click" />
+                    <MenuItem Header="5x8" Click="Generate_5x8_Click" />
+                    <MenuItem Header="6x10" Click="Generate_6x10_Click" />
+                    <MenuItem Header="10x15" Click="Generate_10x15_Click" />
+                    <MenuItem Header="20x30" Click="Generate_20x30_Click" />
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="_Exit" Click="MenuItemExit_Click" />
+            </MenuItem>
+        </Menu>
+        <Border BorderBrush="Gray" BorderThickness="2" Margin="3">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <Canvas x:Name="mainCanvas" />
+            </ScrollViewer>
+        </Border>
+    </DockPanel>
+</Window>
